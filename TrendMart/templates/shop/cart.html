@@ -1,0 +1,74 @@
+{% extends 'shop/leyouts/main.html' %}
+
+{% block title %}
+shop/register
+{% endblock title %}
+
+
+{% block content %}
+<section class="bg-light py-4 my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3">cart items</h4>
+                <hr style="border-color: #b8bfc2;">
+            </div>
+            {{item}}
+            <table class=" table table-border">
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>unit</th>
+                    <th>Quantity</th>
+                    <th>amount</th>
+                    <th>Remove</th>
+                </tr>
+                {% for item in cart %}
+                <tr>
+                    <td><img src="{{item.product.product_image.url}}" style="width:75px; height:75px;"  alt="{{item.product.name}}"></td>
+                    <td>{{item.product.name}}</td>
+                    <td>{{item.product.selling_price|stringformat:'d'}}</td>
+                    <td>{{item.product_qty}}</td>
+                    <td class="amt">
+                        {% widthratio item.product.selling_price 1 item.product_qty %}
+                    </td>
+                    <td><a href="{% url 'remove_cart' item.id %}" onclick="return confirm('Are you Sure to Remove')"
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>Remove</a></td>
+
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2"><b>Total Amount</b></td>
+                    <td id="net" colspan="5">0</td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    /*const node = document.querySelectorAll('.amt');
+    const arr = Array.from(node);
+    const res = arr.reduce((acc, curr) => {
+        return acc += Number(curr.textContent)
+    }, 0);
+    document.getElementById("net").innerHTML = "Rs:" + res;
+*/
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const node = document.querySelectorAll('.amt');
+
+        const arr = Array.from(node);
+
+        const res = arr.reduce((acc, curr) => {
+            return acc + Number(curr.textContent);
+        }, 0);
+
+        document.getElementById("net").innerHTML = "Rs: " + res;
+    });
+</script>
+
+{% endblock content %}
